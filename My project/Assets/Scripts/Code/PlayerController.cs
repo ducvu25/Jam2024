@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         if (GameController.instance.Pause) return;
         isGround = boxCollider.IsTouchingLayers();
@@ -79,7 +79,7 @@ public class PlayerController : MonoBehaviour
         if((facingRight && move < 0) || (!facingRight && move > 0))
             Flip();
         move *= isGround ? 1 : 2;
-        Debug.Log(move);
+        //Debug.Log(move);
         ani.SetBool("Run", move != 0);
         rb.velocity = new Vector2(speed * move, rb.velocity.y);
     }
@@ -104,6 +104,18 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (collision.transform.CompareTag("Ground"))
+        {
+            GameController.instance.UpdateScore(playerA);
+        }
         _numberJump = numberJump;
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("LimitMap"))
+        {
+            Debug.Log("out");
+            GameController.instance.InitPlayer(playerA);
+        }
     }
 }

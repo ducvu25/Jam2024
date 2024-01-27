@@ -7,6 +7,7 @@ public class UIController : MonoBehaviour
 {
     [SerializeField] GameObject goPauseMenu;
     [SerializeField] TextMeshProUGUI txtAudio;
+    [SerializeField] TextMeshProUGUI txtScore;
 
     public static UIController instance;
     private void Awake()
@@ -46,5 +47,9 @@ public class UIController : MonoBehaviour
     public void SetAudio(bool value)
     {
         txtAudio.text = "Âm nhạc: " + (value ? "Bật" : "Tắt");
+    }
+    public void SetScore(int value)
+    {
+        txtScore.text = value.ToString() + " m";
     }
 }

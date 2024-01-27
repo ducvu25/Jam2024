@@ -2,12 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class GameController : MonoBehaviour
 {
-    Vector3[] savePoints;
+    List<Vector3> savePoints;
     
-    GameObject goPlayerA, goPlayerB;
+    [SerializeField] GameObject goPlayerA, goPlayerB;
+    [SerializeField] Vector3 poGround;
+    int score;
     public static GameController instance;
 
     bool pause;
@@ -22,13 +25,21 @@ public class GameController : MonoBehaviour
     {    
         pause = false;
         audio = false;
+        score = 0;
         SetAudio();
 
-        savePoints[0] = goPlayerA.transform.position;
-        savePoints[1] = goPlayerB.transform.position;
+        savePoints = new List<Vector3>();
+        savePoints.Add(goPlayerA.transform.position);
+        savePoints.Add(goPlayerB.transform.position);
     }
-    void InitPlayer(bool value)
+
+    public void InitPlayer(bool value)
     {
+        StartCoroutine(InitPlayer(value, 0.5f));
+    }
+    IEnumerator InitPlayer(bool value, float t)
+    {
+        yield return new WaitForSeconds(t);
         if (value)
         {
             goPlayerA.transform.position = savePoints[0];
@@ -56,7 +67,7 @@ public class GameController : MonoBehaviour
     
     public void NewGame()
     {
-
+        SceneManager.LoadScene(DataGame.GetNameScene(MAP_GAME.lv1));
     }
     public void SetAudio() { 
         audio = !audio;
@@ -69,5 +80,14 @@ public class GameController : MonoBehaviour
     public void Exit()
     {
         Application.Quit();
+    }
+    public void UpdateScore(bool value)
+    {
+        int x = (int)((value ? goPlayerA.transform.position.y : goPlayerB.transform.position.y) - poGround.y);
+        if(x > score)
+        {
+            score = x;
+            UIController.instance.SetScore(score);
+        }
     }
 }

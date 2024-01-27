@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54e0f0690164a14449a91fb226d0c2fc, type: 3}
   m_Name: Hero2
   m_EditorClassIdentifier: 
-  force: 10
+  force: 6.5
   weight: 5
   speed: 2
   dame: 10
